@@ -45,8 +45,8 @@ def clean_content(text: str) -> str:
 
 def episode_link_block(url: str, title: str) -> str:
     """Clickable CTA block appended to the end of the content."""
-    return f"\n\n\n\nSee this and all our episodes here: [{title}]({url})\n"
-
+    # return f"\n\n\n\nSee this and all our episodes here: [{title}]({url})\n" 
+    return f" "
 
 def compute_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
