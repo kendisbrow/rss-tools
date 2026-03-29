@@ -180,6 +180,28 @@ def extract_acast_embed(entry):
 
     return None
 
+def extract_episode_number(entry):
+    """Extract episode number from <itunes:episode>."""
+    ep = entry.get("itunes_episode") or entry.get("itunes:episode")
+    if ep is None:
+        return None
+    try:
+        return int(ep)
+    except ValueError:
+        return str(ep)
+
+
+def extract_season_number(entry):
+    """Extract season number from <itunes:season>."""
+    season = entry.get("itunes_season") or entry.get("itunes:season")
+    if season is None:
+        return None
+    try:
+        return int(season)
+    except ValueError:
+        return str(season)
+
+
 
 # ------------------------------------------------------------
 #  POST CREATION
@@ -217,18 +239,23 @@ def create_jekyll_post(entry, output_dir: Path, sync: bool):
         return
 
     # --- Front matter ---
+ 
+
     front_matter = {
-        "layout": "post",
-        "title": title,
-        "date": date.isoformat(),
-        "original_link": link,
-        "audio_url": extract_audio_url(entry),
-        "duration": extract_duration(entry),
-        "episode_id": extract_acast_episode_id(entry),
-        "embed_url": extract_acast_embed(entry),
-        "tags": extract_tags(entry),
-        "content_hash": content_hash,
-    }
+    "layout": "episode",
+    "title": title,
+    "date": date.isoformat(),
+    "original_link": link,
+    "audio_url": extract_audio_url(entry),
+    "duration": extract_duration(entry),
+    "episode_id": extract_acast_episode_id(entry),
+    "embed_url": extract_acast_embed(entry),
+    "season_number": extract_season_number(entry),     # ← NEW
+    "episode_number": extract_episode_number(entry),   # ← NEW
+    "tags": extract_tags(entry),
+    "content_hash": content_hash,
+}
+
 
     fm_text = "---\n" + yaml.safe_dump(front_matter, sort_keys=False) + "---\n\n"
     markdown = fm_text + full_content + "\n"
