@@ -242,7 +242,7 @@ def create_jekyll_post(entry, output_dir: Path, sync: bool):
  
 
     front_matter = {
-    "layout": "episode",
+    "layout": "post",
     "title": title,
     "date": date.isoformat(),
     "original_link": link,
